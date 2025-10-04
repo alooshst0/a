@@ -1,0 +1,406 @@
+/* أنماط Neumorphism الأساسية */
+.neu {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: 8px 8px 16px var(--shadow-dark),
+              -8px -8px 16px var(--shadow-light);
+  transition: box-shadow var(--transition), transform var(--transition);
+  border: none;
+}
+
+.neu:hover {
+  box-shadow: 12px 12px 24px var(--shadow-dark),
+              -12px -12px 24px var(--shadow-light);
+}
+
+.neu:active,
+.neu.active {
+  transform: translateY(1px);
+  box-shadow: 4px 4px 8px var(--shadow-dark),
+              -4px -4px 8px var(--shadow-light);
+}
+
+.neu-inset {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light);
+}
+
+.neu-input {
+  background: var(--surface);
+  border: none;
+  border-radius: var(--radius);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light);
+  transition: box-shadow var(--transition);
+  font-size: var(--font-size-md);
+  color: var(--text);
+  width: 100%;
+}
+
+.neu-input:focus {
+  outline: none;
+  box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light),
+              0 0 0 2px var(--accent);
+}
+
+/* الأزرار */
+.btn {
+  padding: var(--space-md) var(--space-lg);
+  border: none;
+  border-radius: var(--radius);
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: white;
+  box-shadow: 4px 4px 8px var(--shadow-dark),
+              -4px -4px 8px var(--shadow-light);
+}
+
+.btn-primary:hover {
+  background: var(--accent-dark);
+  box-shadow: 6px 6px 12px var(--shadow-dark),
+              -6px -6px 12px var(--shadow-light);
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 4px 4px 8px var(--shadow-dark),
+              -4px -4px 8px var(--shadow-light);
+}
+
+.btn-icon {
+  background: var(--surface);
+  border: none;
+  border-radius: var(--radius-sm);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 4px 4px 8px var(--shadow-dark),
+              -4px -4px 8px var(--shadow-light);
+  transition: all var(--transition);
+}
+
+.btn-icon:hover {
+  box-shadow: 6px 6px 12px var(--shadow-dark),
+              -6px -6px 12px var(--shadow-light);
+}
+
+/* الكروت */
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  box-shadow: 8px 8px 16px var(--shadow-dark),
+              -8px -8px 16px var(--shadow-light);
+}
+
+.card-header {
+  display: flex;
+  justify-content: between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+}
+
+.card-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+
+/* الجداول */
+.table-container {
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 8px 8px 16px var(--shadow-dark),
+              -8px -8px 16px var(--shadow-light);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+}
+
+.table th {
+  background: var(--surface);
+  padding: var(--space-md);
+  text-align: right;
+  font-weight: 600;
+  border-bottom: 1px solid var(--shadow-dark);
+}
+
+.table td {
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--shadow-dark);
+}
+
+.table tr:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* النماذج */
+.form-group {
+  margin-bottom: var(--space-lg);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: var(--space-sm);
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* التبويبات */
+.tabs {
+  display: flex;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: var(--space-sm);
+  box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light);
+  margin-bottom: var(--space-lg);
+}
+
+.tab {
+  flex: 1;
+  padding: var(--space-md);
+  text-align: center;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition);
+}
+
+.tab.active {
+  background: var(--accent);
+  color: white;
+  box-shadow: 2px 2px 4px var(--shadow-dark);
+}
+
+/* الشريط الجانبي */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: var(--sidebar-width);
+  background: var(--surface);
+  transition: width var(--transition);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.collapsed {
+  width: var(--sidebar-width-collapsed);
+}
+
+.sidebar-header {
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--shadow-dark);
+  display: flex;
+  justify-content: between;
+  align-items: center;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav li {
+  margin: 0;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  color: var(--text);
+  text-decoration: none;
+  transition: all var(--transition);
+  gap: var(--space-md);
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--accent);
+}
+
+.sidebar.collapsed .nav-link span {
+  display: none;
+}
+
+/* شريط العنوان */
+.topbar {
+  position: sticky;
+  top: 0;
+  height: var(--topbar-height);
+  background: var(--surface);
+  display: flex;
+  justify-content: between;
+  align-items: center;
+  padding: 0 var(--space-lg);
+  z-index: 900;
+}
+
+/* منطقة المحتوى */
+.main-content {
+  margin-right: var(--sidebar-width);
+  transition: margin-right var(--transition);
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.sidebar.collapsed ~ .main-content {
+  margin-right: var(--sidebar-width-collapsed);
+}
+
+.content-area {
+  padding: var(--space-lg);
+}
+
+/* شاشة تسجيل الدخول */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: var(--space-lg);
+}
+
+.login-form {
+  padding: var(--space-xl);
+  max-width: 400px;
+  width: 100%;
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.logo h1 {
+  margin: 0 0 var(--space-sm);
+  color: var(--accent);
+}
+
+.logo p {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* الـ Toast */
+.toast-container {
+  position: fixed;
+  top: var(--space-lg);
+  left: var(--space-lg);
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.toast {
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 8px 8px 16px var(--shadow-dark),
+              -8px -8px 16px var(--shadow-light);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  animation: slideIn 0.3s ease;
+}
+
+.toast.success {
+  border-right: 4px solid var(--success);
+}
+
+.toast.error {
+  border-right: 4px solid var(--danger);
+}
+
+.toast.warning {
+  border-right: 4px solid var(--warning);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* الأدوات المساعدة */
+.hidden {
+  display: none !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: var(--space-xs); }
+.mb-2 { margin-bottom: var(--space-sm); }
+.mb-3 { margin-bottom: var(--space-md); }
+.mb-4 { margin-bottom: var(--space-lg); }
+.mb-5 { margin-bottom: var(--space-xl); }
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: var(--space-xs); }
+.mt-2 { margin-top: var(--space-sm); }
+.mt-3 { margin-top: var(--space-md); }
+.mt-4 { margin-top: var(--space-lg); }
+.mt-5 { margin-top: var(--space-xl); }
+
+/* الاستجابة */
+@media (max-width: 768px) {
+  .sidebar {
+    width: var(--sidebar-width-collapsed);
+  }
+  
+  .main-content {
+    margin-right: var(--sidebar-width-collapsed);
+  }
+  
+  .sidebar-header h2,
+  .nav-link span {
+    display: none;
+  }
+  
+  .content-area {
+    padding: var(--space-md);
+  }
+}

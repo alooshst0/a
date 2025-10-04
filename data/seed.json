@@ -1,0 +1,96 @@
+{
+  "users": [
+    {
+      "id": "user_001",
+      "username": "admin",
+      "email": "admin@company.com",
+      "password_hash": "admin123",
+      "role": "super_admin",
+      "fullname": "مدير النظام",
+      "status": "1",
+      "created_at": "2024-01-01T00:00:00Z"
+    },
+    {
+      "id": "user_002", 
+      "username": "cashier",
+      "email": "cashier@company.com",
+      "password_hash": "cashier123",
+      "role": "cashier",
+      "fullname": "كاشير المتجر",
+      "status": "active",
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  ],
+  "warehouses": [
+    {
+      "id": "warehouse_1",
+      "name": "المستودع الرئيسي",
+      "location": "المركز الرئيسي",
+      "manager": "user_001",
+      "capacity": 1000,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  ],
+  "products": [
+    {
+      "id": "prod_001",
+      "sku": "SKU-1001",
+      "barcode": "1234567890123",
+      "name": {
+        "ar": "هاتف ذكي",
+        "en": "Smartphone"
+      },
+      "type": "finished",
+      "category": "إلكترونيات",
+      "unit": "قطعة",
+      "cost_price": 500,
+      "sale_price": 750,
+      "tax_rate": 0.05,
+      "reorder_point": 10,
+      "stock": {
+        "warehouse_1": 25
+      },
+      "attributes": {
+        "color": "أسود",
+        "storage": "128GB"
+      },
+      "created_at": "2024-01-01T00:00:00Z"
+    },
+    {
+      "id": "prod_002",
+      "sku": "SKU-1002",
+      "barcode": "1234567890124",
+      "name": {
+        "ar": "حاسوب محمول",
+        "en": "Laptop"
+      },
+      "type": "finished", 
+      "category": "إلكترونيات",
+      "unit": "قطعة",
+      "cost_price": 800,
+      "sale_price": 1200,
+      "tax_rate": 0.05,
+      "reorder_point": 5,
+      "stock": {
+        "warehouse_1": 8
+      },
+      "attributes": {
+        "ram": "8GB",
+        "storage": "256GB SSD"
+      },
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  ],
+  "suppliers": [
+    {
+      "id": "supp_001",
+      "name": "شركة الإلكترونيات المتحدة",
+      "phone": "+9647701234567",
+      "email": "info@electronics.com",
+      "tax_number": "123456789",
+      "address": "بغداد، المنصور",
+      "payment_terms": "30 يوم",
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  ]
+}

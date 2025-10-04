@@ -1,0 +1,485 @@
+/* إعدادات عامة */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  direction: var(--dir);
+  transition: background-color var(--transition), color var(--transition);
+}
+
+/* تحسينات الوصول */
+:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* تحسينات الطباعة */
+@media print {
+  .sidebar,
+  .topbar,
+  .btn {
+    display: none !important;
+  }
+  
+  .main-content {
+    margin: 0 !important;
+  }
+}
+
+/* مكونات خاصة بالنظام */
+
+/* لوحة التحكم */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.kpi-card {
+  text-align: center;
+  padding: var(--space-xl);
+}
+
+.kpi-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin: var(--space-md) 0;
+}
+
+.kpi-label {
+  color: var(--muted);
+  font-size: var(--font-size-sm);
+}
+
+/* نظام POS */
+.pos-container {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: var(--space-lg);
+  height: calc(100vh - 120px);
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-md);
+  overflow-y: auto;
+  padding: var(--space-md);
+}
+
+.product-card {
+  padding: var(--space-md);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.product-card:hover {
+  transform: translateY(-2px);
+}
+
+.product-image {
+  width: 80px;
+  height: 80px;
+  background: var(--bg);
+  border-radius: var(--radius);
+  margin: 0 auto var(--space-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.cart-container {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-items {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: var(--space-lg);
+}
+
+.cart-item {
+  display: flex;
+  justify-content: between;
+  align-items: center;
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--shadow-dark);
+}
+
+.cart-summary {
+  border-top: 1px solid var(--shadow-dark);
+  padding-top: var(--space-md);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: between;
+  margin-bottom: var(--space-sm);
+}
+
+.summary-total {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* نماذج البيانات */
+.data-table-actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.search-box {
+  flex: 1;
+  max-width: 400px;
+}
+
+/* المودالات */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: var(--space-lg);
+}
+
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: var(--space-xl);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--muted);
+}
+
+/* تحميل البيانات */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  color: var(--muted);
+}
+
+.loading::after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--muted);
+  border-top: 2px solid var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: var(--space-sm);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* الرسوم البيانية */
+.chart-container {
+  position: relative;
+  height: 400px;
+  margin-bottom: var(--space-lg);
+}
+/* أنماط إضافية للوحدات الجديدة */
+
+/* لوحة التحكم */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-lg);
+    margin-bottom: var(--space-lg);
+}
+
+.kpi-card {
+    padding: var(--space-lg);
+    text-align: center;
+    transition: transform var(--transition);
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+}
+
+.kpi-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-md);
+}
+
+.kpi-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin: var(--space-sm) 0;
+}
+
+.kpi-label {
+    color: var(--muted);
+    font-size: var(--font-size-sm);
+}
+
+.dashboard-lower-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-lg);
+}
+
+.dashboard-card {
+    padding: var(--space-lg);
+}
+
+.recent-sales .sale-item,
+.low-stock-list .stock-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--shadow-dark);
+}
+
+.quick-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-md);
+}
+
+.quick-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md);
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+}
+
+/* المشتريات */
+.status-badge {
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-received {
+    background: #d1edff;
+    color: #004085;
+}
+
+.status-cancelled {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.purchase-item-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+    align-items: center;
+}
+
+.purchase-summary {
+    margin-top: var(--space-lg);
+    padding: var(--space-md);
+    background: var(--bg);
+    border-radius: var(--radius);
+}
+
+.purchase-summary .total-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-sm) 0;
+    border-top: 1px solid var(--shadow-dark);
+}
+
+.purchase-summary .total-row.total {
+    font-weight: 700;
+    font-size: var(--font-size-lg);
+    color: var(--accent);
+}
+
+/* التقارير */
+.report-filters {
+    display: flex;
+    gap: var(--space-md);
+    align-items: end;
+    margin-bottom: var(--space-lg);
+    padding: var(--space-md);
+    background: var(--surface);
+    border-radius: var(--radius);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.report-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-lg);
+    margin-bottom: var(--space-lg);
+}
+
+.summary-card {
+    padding: var(--space-lg);
+    text-align: center;
+}
+
+.summary-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: var(--space-sm);
+}
+
+.report-charts {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-lg);
+}
+
+.chart-card {
+    padding: var(--space-lg);
+}
+
+.bar-chart {
+    display: flex;
+    align-items: end;
+    gap: var(--space-md);
+    height: 200px;
+    margin-top: var(--space-lg);
+}
+
+.bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    height: 100%;
+}
+
+.bar {
+    background: var(--accent);
+    width: 30px;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    transition: height var(--transition);
+}
+
+.bar-label,
+.bar-value {
+    font-size: var(--font-size-sm);
+    margin-top: var(--space-sm);
+    text-align: center;
+}
+
+.products-chart {
+    margin-top: var(--space-lg);
+}
+
+.product-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.product-name {
+    flex: 1;
+    font-size: var(--font-size-sm);
+}
+
+.product-bar-container {
+    flex: 2;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    height: 20px;
+    overflow: hidden;
+}
+
+.product-bar {
+    background: var(--accent);
+    height: 100%;
+    transition: width var(--transition);
+}
+
+.product-value {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    min-width: 80px;
+    text-align: left;
+}
+
+/* التجاوب */
+@media (max-width: 768px) {
+    .dashboard-lower-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .report-charts {
+        grid-template-columns: 1fr;
+    }
+    
+    .report-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .purchase-item-row {
+        grid-template-columns: 1fr;
+        gap: var(--space-sm);
+    }
+}

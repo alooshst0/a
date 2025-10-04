@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة المبيعات والمخزون</title>
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/neumorph.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4aa3ff">
+</head>
+<body>
+    <!-- شاشة تسجيل الدخول -->
+    <div id="login-screen" class="login-container">
+        <div class="login-form neu">
+            <div class="logo">
+                <h1>نظام ERP</h1>
+                <p>إدارة المبيعات والمخزون</p>
+            </div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">اسم المستخدم</label>
+                    <input type="text" id="username" name="username" required class="neu-input">
+                </div>
+                <div class="form-group">
+                    <label for="password">كلمة المرور</label>
+                    <input type="password" id="password" name="password" required class="neu-input">
+                </div>
+                <button type="submit" class="btn-primary neu">تسجيل الدخول</button>
+            </form>
+            <div class="login-footer">
+                <p>نسخة تجريبية - البيانات مخزنة محليًا</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- التطبيق الرئيسي -->
+    <div id="app" class="app-container hidden">
+        <!-- الشريط الجانبي -->
+        <aside class="sidebar neu">
+            <div class="sidebar-header">
+                <h2>القائمة</h2>
+                <button id="sidebar-toggle" class="btn-icon">≡</button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#dashboard" class="nav-link active" data-module="dashboard">لوحة التحكم</a></li>
+                    <li><a href="#inventory" class="nav-link" data-module="inventory">المخزون</a></li>
+                    <li><a href="#bom" class="nav-link" data-module="bom">قائمة المواد</a></li>
+                    <li><a href="#sales" class="nav-link" data-module="sales">المبيعات (POS)</a></li>
+                    <li><a href="#purchases" class="nav-link" data-module="purchases">المشتريات</a></li>
+                    <li><a href="#reports" class="nav-link" data-module="reports">التقارير</a></li>
+                    <li><a href="#users" class="nav-link" data-module="users">المستخدمين</a></li>
+                    <li><a href="#backup" class="nav-link" data-module="backup">النسخ الاحتياطي</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content">
+            <!-- شريط العنوان -->
+            <header class="topbar neu">
+                <div class="topbar-left">
+                    <h1 id="page-title">لوحة التحكم</h1>
+                </div>
+                <div class="topbar-right">
+                    <div class="user-menu">
+                        <span id="user-greeting">مرحبًا، مستخدم</span>
+                        <button id="user-menu-btn" class="btn-icon">👤</button>
+                        <div id="user-dropdown" class="dropdown hidden">
+                            <a href="#profile">الملف الشخصي</a>
+                            <a href="#settings">الإعدادات</a>
+                            <button id="logout-btn">تسجيل الخروج</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- منطقة المحتوى الديناميكي -->
+            <div id="content-area" class="content-area">
+                <!-- سيتم تحميل الوحدات هنا -->
+            </div>
+        </main>
+    </div>
+
+    <!-- الـ Toast للإشعارات -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- scripts -->
+    <script type="module" src="assets/js/storage.js"></script>
+    <script type="module" src="assets/js/auth.js"></script>
+    <script type="module" src="assets/js/router.js"></script>
+    <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>
