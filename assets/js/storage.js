@@ -1,31 +1,23 @@
 /**
- * نظام التخزين المحلي - يدعم LocalStorage و IndexedDB
- * @module storage
+ * نظام التخزين المحلي - بدون ES Modules
  */
 
-// في بداية الملف، تأكد من هذا الكود:
 class StorageManager {
     constructor() {
         this.dbName = 'erp_pos_system';
         this.dbVersion = 1;
         this.db = null;
         this.useIndexedDB = 'indexedDB' in window;
-        console.log('💾 نظام التخزين:', this.useIndexedDB ? 'IndexedDB' : 'LocalStorage');
         this.init();
     }
 
     async init() {
-        try {
-            if (this.useIndexedDB) {
-                await this.initIndexedDB();
-            } else {
-                console.warn('⚠ IndexedDB غير مدعوم، سيتم استخدام LocalStorage فقط');
-            }
-        } catch (error) {
-            console.error('❌ خطأ في تهيئة التخزين:', error);
+        if (this.useIndexedDB) {
+            await this.initIndexedDB();
+        } else {
+            console.warn('IndexedDB غير مدعوم، سيتم استخدام LocalStorage فقط');
         }
     }
-}
 
     initIndexedDB() {
         return new Promise((resolve, reject) => {
@@ -40,7 +32,6 @@ class StorageManager {
             request.onupgradeneeded = (event) => {
                 const db = event.target.result;
                 
-                // إنشاء جداول البيانات
                 const stores = [
                     'users', 'products', 'bom', 'sales', 'purchases', 
                     'customers', 'suppliers', 'warehouses', 'stock_movements',
@@ -51,16 +42,9 @@ class StorageManager {
                     if (!db.objectStoreNames.contains(store)) {
                         const objectStore = db.createObjectStore(store, { keyPath: 'id' });
                         
-                        // إنشاء فهارس للبحث السريع
                         if (store === 'products') {
                             objectStore.createIndex('sku', 'sku', { unique: true });
                             objectStore.createIndex('barcode', 'barcode', { unique: false });
-                            objectStore.createIndex('category', 'category', { unique: false });
-                        }
-                        
-                        if (store === 'sales') {
-                            objectStore.createIndex('date', 'created_at', { unique: false });
-                            objectStore.createIndex('customer_id', 'customer_id', { unique: false });
                         }
                     }
                 });
@@ -68,12 +52,6 @@ class StorageManager {
         });
     }
 
-    /**
-     * حفظ بيانات
-     * @param {string} store - اسم المجموعة
-     * @param {object} data - البيانات للحفظ
-     * @returns {Promise}
-     */
     async save(store, data) {
         if (this.useIndexedDB && this.db) {
             return this.saveToIndexedDB(store, data);
@@ -82,12 +60,6 @@ class StorageManager {
         }
     }
 
-    /**
-     * جلب بيانات
-     * @param {string} store - اسم المجموعة
-     * @param {string} id - المعرف (اختياري)
-     * @returns {Promise}
-     */
     async get(store, id = null) {
         if (this.useIndexedDB && this.db) {
             return this.getFromIndexedDB(store, id);
@@ -96,25 +68,6 @@ class StorageManager {
         }
     }
 
-    /**
-     * حذف بيانات
-     * @param {string} store - اسم المجموعة
-     * @param {string} id - المعرف
-     * @returns {Promise}
-     */
-    async delete(store, id) {
-        if (this.useIndexedDB && this.db) {
-            return this.deleteFromIndexedDB(store, id);
-        } else {
-            return this.deleteFromLocalStorage(store, id);
-        }
-    }
-
-    /**
-     * جلب جميع البيانات من مجموعة
-     * @param {string} store - اسم المجموعة
-     * @returns {Promise}
-     */
     async getAll(store) {
         if (this.useIndexedDB && this.db) {
             return this.getAllFromIndexedDB(store);
@@ -129,7 +82,6 @@ class StorageManager {
             const transaction = this.db.transaction([store], 'readwrite');
             const objectStore = transaction.objectStore(store);
             
-            // تسجيل وقت التعديل
             if (Array.isArray(data)) {
                 data.forEach(item => {
                     if (!item.created_at) item.created_at = new Date().toISOString();
@@ -171,18 +123,6 @@ class StorageManager {
         });
     }
 
-    async deleteFromIndexedDB(store, id) {
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction([store], 'readwrite');
-            const objectStore = transaction.objectStore(store);
-            
-            const request = objectStore.delete(id);
-            
-            request.onsuccess = () => resolve(true);
-            request.onerror = () => reject(request.error);
-        });
-    }
-
     async getAllFromIndexedDB(store) {
         return this.getFromIndexedDB(store);
     }
@@ -193,7 +133,6 @@ class StorageManager {
             const key = ${this.dbName}_${store};
             
             if (Array.isArray(data)) {
-                // حفظ مجموعة من البيانات
                 const existingData = this.getFromLocalStorage(store) || [];
                 const newData = [...existingData];
                 
@@ -212,7 +151,6 @@ class StorageManager {
                 
                 localStorage.setItem(key, JSON.stringify(newData));
             } else {
-                // حفظ عنصر واحد
                 if (!data.id) data.id = this.generateId();
                 if (!data.created_at) data.created_at = new Date().toISOString();
                 data.updated_at = new Date().toISOString();
@@ -244,59 +182,14 @@ class StorageManager {
         return data;
     }
 
-    deleteFromLocalStorage(store, id) {
-        return new Promise((resolve) => {
-            const key = ${this.dbName}_${store};
-            const data = this.getFromLocalStorage(store);
-            const filteredData = data.filter(item => item.id !== id);
-            
-            localStorage.setItem(key, JSON.stringify(filteredData));
-            resolve(true);
-        });
-    }
-
     getAllFromLocalStorage(store) {
         return Promise.resolve(this.getFromLocalStorage(store));
     }
 
-    /**
-     * إنشاء معاملة (Transaction)
-     * @param {Array} operations - قائمة العمليات
-     * @returns {Promise}
-     */
-    async transaction(operations) {
-        try {
-            const results = [];
-            
-            for (const op of operations) {
-                const { type, store, data, id } = op;
-                
-                switch (type) {
-                    case 'save':
-                        results.push(await this.save(store, data));
-                        break;
-                    case 'get':
-                        results.push(await this.get(store, id));
-                        break;
-                    case 'delete':
-                        results.push(await this.delete(store, id));
-                        break;
-                    default:
-                        throw new Error(نوع العملية غير معروف: ${type});
-                }
-            }
-            
-            return results;
-        } catch (error) {
-            console.error('فشلت المعاملة:', error);
-            throw error;
-        }
+    generateId() {
+        return ${Date.now()}_${Math.random().toString(36).substr(2, 9)};
     }
 
-    /**
-     * تصدير جميع البيانات
-     * @returns {Promise}
-     */
     async exportData() {
         const stores = [
             'users', 'products', 'bom', 'sales', 'purchases', 
@@ -315,44 +208,7 @@ class StorageManager {
         
         return data;
     }
-
-    /**
-     * استيراد البيانات
-     * @param {object} data - البيانات المستوردة
-     * @returns {Promise}
-     */
-    async importData(data) {
-        const stores = Object.keys(data).filter(key => 
-            !['exported_at', 'version'].includes(key)
-        );
-        
-        const operations = [];
-        
-        for (const store of stores) {
-            if (Array.isArray(data[store])) {
-                data[store].forEach(item => {
-                    operations.push({
-                        type: 'save',
-                        store,
-                        data: item
-                    });
-                });
-            }
-        }
-        
-        return this.transaction(operations);
-    }
-
-    /**
-     * توليد معرف فريد
-     * @returns {string}
-     */
-    generateId() {
-        return ${Date.now()}_${Math.random().toString(36).substr(2, 9)};
-    }
 }
 
-// إنشاء نسخة وحيدة من مدير التخزين
-const storage = new StorageManager();
-
-export default storage;
+// إنشاء نسخة عامة بدل export
+window.storage = new StorageManager();
