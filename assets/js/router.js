@@ -1,100 +1,199 @@
 /**
- * نظام التوجيه للوحدات - بدون ES Modules
+ * الملف الرئيسي للتطبيق - بدون ES Modules
  */
 
-class Router {
+class ERPApp {
     constructor() {
-        this.routes = new Map();
-        this.currentModule = null;
+        this.modules = new Map();
         this.init();
     }
 
-    init() {
-        window.addEventListener('hashchange', () => this.handleRouteChange());
-        window.addEventListener('DOMContentLoaded', () => this.handleRouteChange());
-    }
-
-    register(path, module) {
-        this.routes.set(path, module);
-    }
-
-    async handleRouteChange() {
-        const hash = window.location.hash.slice(1) || 'dashboard';
-        const [path, ...params] = hash.split('/');
-        
-        await this.navigate(path, params);
-    }
-
-    async navigate(path, params = []) {
+    async init() {
         try {
-            if (this.currentModule && typeof this.currentModule.hide === 'function') {
-                await this.currentModule.hide();
-            }
-
-            const module = this.routes.get(path);
-            
-            if (!module) {
-                await this.showError('الصفحة غير موجودة');
-                return;
-            }
-
-            document.getElementById('page-title').textContent = this.getPageTitle(path);
-            this.updateActiveNav(path);
-            
-            this.currentModule = module;
-            
-            if (typeof module.show === 'function') {
-                await module.show(params);
-            }
+            await this.initializeData();
+            this.registerModules();
+            this.setupEventListeners();
+            this.checkAuthentication();
         } catch (error) {
-            console.error('خطأ في التنقل:', error);
-            await this.showError('حدث خطأ أثناء تحميل الصفحة');
+            console.error('خطأ في تهيئة التطبيق:', error);
+            this.showToast('حدث خطأ في تحميل التطبيق', 'error');
         }
     }
 
-    getPageTitle(path) {
-        const titles = {
-            'dashboard': 'لوحة التحكم',
-            'inventory': 'إدارة المخزون',
-            'bom': 'قائمة المواد',
-            'sales': 'نقطة البيع',
-            'purchases': 'المشتريات',
-            'reports': 'التقارير',
-            'users': 'إدارة المستخدمين',
-            'backup': 'النسخ الاحتياطي'
+    async initializeData() {
+        const users = await window.storage.getAll('users');
+        
+        if (users.length === 0) {
+            await this.createSeedData();
+        }
+    }
+
+    async createSeedData() {
+        const seedData = {
+            users: [
+                {
+                    id: 'user_001',
+                    username: 'admin',
+                    email: 'admin@company.com',
+                    password_hash: 'admin123',
+                    role: 'super_admin',
+                    fullname: 'مدير النظام',
+                    status: 'active',
+                    created_at: new Date().toISOString()
+                }
+            ],
+            products: [
+                {
+                    id: 'prod_001',
+                    sku: 'SKU-1001',
+                    barcode: '1234567890123',
+                    name: { ar: 'هاتف ذكي', en: 'Smartphone' },
+                    type: 'finished',
+                    category: 'إلكترونيات',
+                    unit: 'قطعة',
+                    cost_price: 500,
+                    sale_price: 750,
+                    tax_rate: 0.05,
+                    reorder_point: 10,
+                    stock: { 'warehouse_1': 25 },
+                    attributes: { color: 'أسود', storage: '128GB' },
+                    created_at: new Date().toISOString()
+                }
+            ],
+            warehouses: [
+                {
+                    id: 'warehouse_1',
+                    name: 'المستودع الرئيسي',
+                    location: 'المركز الرئيسي',
+                    manager: 'user_001',
+                    capacity: 1000,
+                    created_at: new Date().toISOString()
+                }
+            ]
         };
-        
-        return titles[path] || 'النظام';
-    }
 
-    updateActiveNav(path) {
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.remove('active');
-        });
-        
-        const activeLink = document.querySelector('[data-module="' + path + '"]');
-        if (activeLink) {
-            activeLink.classList.add('active');
+        for (const [store, data] of Object.entries(seedData)) {
+            await window.storage.save(store, data);
         }
     }
 
-    async showError(message) {
-        const contentArea = document.getElementById('content-area');
-        contentArea.innerHTML = `
-            <div class="card text-center">
-                <h2>⚠ خطأ</h2>
-                <p>${message}</p>
-                <button onclick="window.location.hash = 'dashboard'" class="btn-primary mt-4">
-                    العودة للرئيسية
-                </button>
-            </div>
-        `;
+    registerModules() {
+        // سيتم تسجيل الوحدات هنا لاحقاً
+        console.log('تم تسجيل الوحدات');
     }
 
-    createLink(path) {
-        return '#' + path;
+    setupEventListeners() {
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleLogin();
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            this.handleLogout();
+        });
+
+        document.getElementById('sidebar-toggle').addEventListener('click', () => {
+            this.toggleSidebar();
+        });
+
+        document.getElementById('user-menu-btn').addEventListener('click', () => {
+            this.toggleUserMenu();
+        });
+
+        window.addEventListener('sessionExpired', () => {
+            this.handleSessionExpired();
+        });
+
+        document.addEventListener('click', () => window.auth.refreshSession());
+        document.addEventListener('keypress', () => window.auth.refreshSession());
+    }
+
+    async handleLogin() {
+        const form = document.getElementById('login-form');
+        const formData = new FormData(form);
+        
+        const username = formData.get('username');
+        const password = formData.get('password');
+        
+        try {
+            await window.auth.login(username, password);
+            this.showApp();
+            this.showToast('تم تسجيل الدخول بنجاح', 'success');
+        } catch (error) {
+            this.showToast(error.message, 'error');
+        }
+    }
+
+    async handleLogout() {
+        await window.auth.logout();
+        this.showLogin();
+        this.showToast('تم تسجيل الخروج', 'success');
+    }
+
+    handleSessionExpired() {
+        this.showLogin();
+        this.showToast('انتهت الجلسة، يرجى تسجيل الدخول مرة أخرى', 'warning');
+    }
+
+    checkAuthentication() {
+        if (window.auth.isAuthenticated()) {
+            this.showApp();
+        } else {
+            this.showLogin();
+        }
+    }
+
+    showApp() {
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('app').classList.remove('hidden');
+        
+        const user = window.auth.getCurrentUser();
+        if (user) {
+            document.getElementById('user-greeting').textContent = 'مرحبًا، ' + user.fullname;
+        }
+    }
+
+    showLogin() {
+        document.getElementById('login-screen').classList.remove('hidden');
+        document.getElementById('app').classList.add('hidden');
+        document.getElementById('login-form').reset();
+    }
+
+    toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.classList.toggle('collapsed');
+    }
+
+    toggleUserMenu() {
+        const dropdown = document.getElementById('user-dropdown');
+        dropdown.classList.toggle('hidden');
+    }
+
+    showToast(message, type) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast ' + type;
+        
+        const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠';
+        toast.innerHTML = '<span>' + icon + '</span><span>' + message + '</span>';
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 5000);
+        
+        toast.addEventListener('click', () => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        });
     }
 }
 
-// إنشاء نسخة عامة
-window.router = new Router();
+// تهيئة التطبيق عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+    window.erpApp = new ERPApp();
+});
